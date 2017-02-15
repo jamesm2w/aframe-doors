@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://aframe.io/releases/0.5.0/aframe.min.js"></script>
+        <title>Holodeck</title>
+    </head>
+    <body>
+        <script>
+            console.log("OKAY");
+        </script>
+        <a-scene>
+            <a-assets>
+                <img id="texture_floor" src="textures/floor.png" alt="Grass">
+                <img id="texture_night" src="textures/grid.png" alt="sky">
+            </a-assets>
+
+            <!-- Holodeck Grid -->
+            <a-plane src="#texture_floor" height="30" width="30" rotation="-90 0 0" repeat="5 5"></a-plane>
+            <a-sphere src="#texture_night" radius="15" material="side: double;"></a-sphere>
+
+            <!-- Doors -->
+            <a-box id="door" color="red" depth="0.2" height="2" width="1.5" position="0 1 0">
+                <a-animation begin="buttonclick" attribute="position" dur="700" to="-1.4 1 0"></a-animation>
+            </a-box>
+            <a-box id="door" color="red" depth="0.2" height="2" width="1.5" position="1.5 1 0">
+                <a-animation begin="buttonclick" attribute="position" dur="700" to="-1.4 1 0"></a-animation>
+            </a-box>
+
+            <!-- Frame -->
+            <a-box color="white" depth="0.4" height="2.5" width="4" position="-2.7 1.25 0">
+                <a-plane color="black" width="0.2" height="0.2" position="1.74 0.2 -0.21" rotation="0 180 0">
+                    <a-text value="O" color="white" position="-0.1 0 0" width="2.94"></a-text>
+                </a-plane>
+            </a-box>
+            <a-box color="white" depth="0.4" height="2.5" width="4" position="4.24 1.25 0">
+                <a-plane color="black" width="0.2" height="0.2" position="-1.81 0.2 0.21">
+                    <a-text value="O" color="white" position="-0.1 0 0" width="2.94"></a-text>
+                </a-plane>
+            </a-box>
+            <a-box color="white" depth="0.4" height="2.0" width="10.98" position="0.8 3.0 0"></a-box>
+
+
+            <a-sky color="black"></a-sky>
+
+            <a-camera position="0.97 0 -1.94" rotation="-3.21 -179.56 0">
+                <a-cursor color="lightgreen"></a-cursor>
+            </a-camera>
+
+            <a-entity light="type: point; intensity: 1; distance: 0; decay: 1" position="0 13 0"></a-entity>
+            <a-entity light="type: ambient; intensity: 0.1"></a-entity>
+        </a-scene>
+
+        <script>
+            button = document.querySelector("a-plane");
+            button.addEventListener("click", function (event) {
+                var status;
+                switch (button.getAttribute("value")) {
+                    case "O":
+                        status = "open"
+                        break;
+                    case "I":
+                        status = "close"
+                        break;
+                    default:
+                        status = "open"
+                }
+                document.querySelector("#door").emit("buttonclick", { "goingTo": status }, false)
+            });
+
+
+        </script>
+
+    </body>
+</html>
