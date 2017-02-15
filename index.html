@@ -19,11 +19,11 @@
             <a-sphere src="#texture_night" radius="15" material="side: double;"></a-sphere>
 
             <!-- Doors -->
-            <a-box id="door" color="red" depth="0.2" height="2" width="1.5" position="0 1 0">
-                <a-animation begin="buttonclick" attribute="position" dur="700" to="-1.4 1 0"></a-animation>
+            <a-box id="door1" color="red" depth="0.2" height="2" width="1.5" position="0 1 0">
+                <a-animation begin="buttonclickopen" attribute="position" dur="700" to="-1.4 1 0"></a-animation>
             </a-box>
-            <a-box id="door" color="red" depth="0.2" height="2" width="1.5" position="1.5 1 0">
-                <a-animation begin="buttonclick" attribute="position" dur="700" to="-1.4 1 0"></a-animation>
+            <a-box id="door2" color="red" depth="0.2" height="2" width="1.5" position="1.5 1 0">
+                <a-animation begin="buttonclickopen" attribute="position" dur="700" to="2.9 1 0"></a-animation>
             </a-box>
 
             <!-- Frame -->
@@ -64,7 +64,8 @@
                     default:
                         status = "open"
                 }
-                document.querySelector("#door").emit("buttonclick", { "goingTo": status }, false)
+                document.querySelector("#door1").emit("buttonclickopen", { "goingTo": status }, false)
+                document.querySelector("#door2").emit("buttonclickopen", { "goingTo": status }, false)
             });
 
 
