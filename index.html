@@ -2,11 +2,12 @@
 <html>
     <head>
         <script src="https://aframe.io/releases/0.5.0/aframe.min.js"></script>
+        
         <title>Holodeck</title>
     </head>
     <body>
         <script>
-            console.log("OKAY");
+            
         </script>
         <a-scene>
             <a-assets>
@@ -20,22 +21,22 @@
 
             <!-- Doors -->
             <a-box id="door1" color="red" depth="0.2" height="2" width="1.5" position="0 1 0">
-                <a-animation begin="buttonclickopen" attribute="position" dur="700" to="-1.4 1 0"></a-animation>
+                <a-animation begin="click" direction="alternate-reverse" attribute="position" dur="700" to="-1.4 1 0"></a-animation>
             </a-box>
             <a-box id="door2" color="red" depth="0.2" height="2" width="1.5" position="1.5 1 0">
-                <a-animation begin="buttonclickopen" attribute="position" dur="700" to="2.9 1 0"></a-animation>
+                <a-animation begin="click" direction="alternate-reverse" attribute="position" dur="700" to="2.9 1 0"></a-animation>
             </a-box>
 
             <!-- Frame -->
             <a-box color="white" depth="0.4" height="2.5" width="4" position="-2.7 1.25 0">
-                <a-plane color="black" width="0.2" height="0.2" position="1.74 0.2 -0.21" rotation="0 180 0">
-                    <a-text value="O" color="white" position="-0.1 0 0" width="2.94"></a-text>
-                </a-plane>
+                <a-box id="button" color="black" width="0.2" height="0.2" depth="0.1" position="1.74 0.2 -0.21" rotation="0 180 0">
+                    <a-text value="O" color="white" position="-0.1 0 0.05" width="2.94"></a-text>
+                </a-box>
             </a-box>
             <a-box color="white" depth="0.4" height="2.5" width="4" position="4.24 1.25 0">
-                <a-plane color="black" width="0.2" height="0.2" position="-1.81 0.2 0.21">
-                    <a-text value="O" color="white" position="-0.1 0 0" width="2.94"></a-text>
-                </a-plane>
+                <a-box id="button" color="black" width="0.2" height="0.2" depth="0.1" position="-1.81 0.2 0.21">
+                    <a-text value="O" color="white" position="-0.1 0 0.05" width="2.94"></a-text>
+                </a-box>
             </a-box>
             <a-box color="white" depth="0.4" height="2.0" width="10.98" position="0.8 3.0 0"></a-box>
 
@@ -51,24 +52,20 @@
         </a-scene>
 
         <script>
-            button = document.querySelector("a-plane");
-            button.addEventListener("click", function (event) {
-                var status;
-                switch (button.getAttribute("value")) {
-                    case "O":
-                        status = "open"
-                        break;
-                    case "I":
-                        status = "close"
-                        break;
-                    default:
-                        status = "open"
+            //Look for a click event on #button
+            entity = document.querySelecter("#button");
+            entity.addState("closed");
+            entity.addEventListener("click", function (event) {
+                if (entity.is("closed")) {
+                    entity.addState("open");
+                    entity.removeState("closed");
+                    document.querySelector("#door1").emit("open")
+                    document.querySelector("#door2").emit("open")
+                } else if (entity.is("open")) {
+                    entity.addState("closed");
+                    entity.removeState("open");
                 }
-                document.querySelector("#door1").emit("buttonclickopen", { "goingTo": status }, false)
-                document.querySelector("#door2").emit("buttonclickopen", { "goingTo": status }, false)
             });
-
-
         </script>
 
     </body>
