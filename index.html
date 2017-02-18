@@ -20,22 +20,26 @@
             <a-sphere src="#texture_night" radius="15" material="side: double;"></a-sphere>
 
             <!-- Doors -->
+
             <a-box id="door1" color="red" depth="0.2" height="2" width="1.5" position="0 1 0">
-                <a-animation begin="click" direction="alternate-reverse" attribute="position" dur="700" to="-1.4 1 0"></a-animation>
+                <!---->
+                <a-animation id="move_door1" begin="triggered" direction="alternate" attribute="position" dur="700" to="-1.4 1 0"></a-animation>
             </a-box>
+
             <a-box id="door2" color="red" depth="0.2" height="2" width="1.5" position="1.5 1 0">
-                <a-animation begin="click" direction="alternate-reverse" attribute="position" dur="700" to="2.9 1 0"></a-animation>
+                <!---->
+                <a-animation id="move_door2" begin="triggered" direction="alternate" attribute="position" dur="700" to="2.9 1 0"></a-animation>
             </a-box>
 
             <!-- Frame -->
             <a-box color="white" depth="0.4" height="2.5" width="4" position="-2.7 1.25 0">
-                <a-box id="button" color="black" width="0.2" height="0.2" depth="0.1" position="1.74 0.2 -0.21" rotation="0 180 0">
-                    <a-text value="O" color="white" position="-0.1 0 0.05" width="2.94"></a-text>
+                <a-box class="button_box" color="black" width="0.2" height="0.2" depth="0.1" position="1.76 0.2 0.21">
+                    <a-text class="button_text" value="O" color="white" position="-0.1 0 0.05" width="2.94"></a-text>
                 </a-box>
             </a-box>
             <a-box color="white" depth="0.4" height="2.5" width="4" position="4.24 1.25 0">
-                <a-box id="button" color="black" width="0.2" height="0.2" depth="0.1" position="-1.81 0.2 0.21">
-                    <a-text value="O" color="white" position="-0.1 0 0.05" width="2.94"></a-text>
+                <a-box class="button_box" color="black" width="0.2" height="0.2" depth="0.1" position="-1.76 0.2 -0.21" rotation="0 180 0">
+                    <a-text class="button_text" value="O" color="white" position="-0.1 0 0.05" width="2.94"></a-text>
                 </a-box>
             </a-box>
             <a-box color="white" depth="0.4" height="2.0" width="10.98" position="0.8 3.0 0"></a-box>
@@ -53,19 +57,28 @@
 
         <script>
             //Look for a click event on #button
-            entity = document.querySelecter("#button");
-            entity.addState("closed");
-            entity.addEventListener("click", function (event) {
-                if (entity.is("closed")) {
-                    entity.addState("open");
-                    entity.removeState("closed");
-                    document.querySelector("#door1").emit("open")
-                    document.querySelector("#door2").emit("open")
-                } else if (entity.is("open")) {
-                    entity.addState("closed");
-                    entity.removeState("open");
-                }
-            });
+            var button = document.querySelectorAll(".button_box");
+            for (var i = 0; i < button.length; i++) {
+                button[i].addEventListener("click", function (event) {
+                    //console.log("Activated button");
+                    document.querySelector("#door1").emit("triggered", { from: button[i] }, true);
+                    document.querySelector("#door2").emit("triggered", { from: button[i] }, true);
+                    var doorstatus = document.querySelector(".button_text").getAttribute("value");
+                    //console.log(doorstatus);
+                    if (doorstatus === "O") {
+                        doorstatus = "I";
+                    } else if (doorstatus === "I") {
+                        doorstatus = "O";
+                    }
+                    //console.log(doorstatus);
+                    var text = document.querySelectorAll(".button_text");
+                    for (var i = 0; i < text.length; i++) {
+                        text[i].setAttribute("value", doorstatus);
+                        //console.log(text[i]);
+                    };
+                });
+            };
+
         </script>
 
     </body>
