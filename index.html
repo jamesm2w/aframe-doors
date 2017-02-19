@@ -7,7 +7,38 @@
     </head>
     <body>
         <script>
-            
+            AFRAME.registerComponent("door-controller", {
+                    schema: {
+                        triggerOn: {type: "string", default: "click"},
+                        doorFamily: {type: "string", default: ".door-group"},
+                        feedbackOpen: {type: "string", default: ""},
+                        feedbackClosed: {type: "string", default: ""},
+                        feedbackEl: {type: "string", default: ""}
+                    },
+
+                    init: function () {
+                        var self = this;
+                        this.eventFunction = function (evt) {
+                            doors = querySelectorAll(self.data.doorFamily)
+                            for (var i = 0; i < doors.length; i++){
+                                doors[i].emit("triggered", {controller: el} , true);
+                            }
+                        }
+                    },
+
+                    update: function (oldData) {
+                        data = this.data;
+                        el = this.el;
+                        
+                        if (oldData.triggerOn && data.triggerOn !== oldData.triggerOn) {
+                            el.removeEventListener(oldData.triggerOn, this.eventFunction);
+                        }
+
+                        if (data.triggerOn) {
+                            el.addEventListener(data.triggerOn, this.eventFunction);
+                        }
+                    },
+            });
         </script>
         <a-scene>
             <a-assets>
